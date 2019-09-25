@@ -1,0 +1,107 @@
+
+cookie : 少量信息，保存於瀏覽器緩存中的數據，由服務器創建並發出
+
+
+cookie主要應用 : 
+
+	1.判斷註冊用戶是否已經登入
+
+	2.保留登陸信息以實現自動登入
+
+	3.廣告推廣
+
+新增 cookie :
+
+	setcookie(string 名字[,string 值,int 過期時間(從1970年開始計算，以時間戳形式表示，默認為0),string 路徑,string 域名,bool 安全連接,bool 只支持http的cookie])
+
+		// 例 : setcookie('username','itsource');，若要修改直接重新定義即可
+
+修改 cookie :
+
+	setcookie('cookie名','新的值');
+
+獲取 cookie :
+
+	cookie儲存於 : $_COOKIE['cookie名'];	// 例:$c=$_COOKIE['username'];
+
+刪除 cookie :
+
+	setcookie('cookie名','',不為0的數字);	// cookie有生命週期，setcookie的第三個參數就是cookie生命週期，以時間戳的形式表示
+
+cookie的生命週期 :
+
+	1.默認為0，表示生成一個臨時cookie，瀏覽器關閉後消失
+
+	2.通常以time()作為基準進行時間推算		
+
+		生成10秒的cookie : setcookie('age','20歲',time()+10);
+
+	3.要刪除一個cookie，只要將時間設置為過去時間即可
+
+	4.永久cookie : setcookie('age','20歲',PHP_INT_MAX);
+
+cookie的注意事項 :
+
+	1.cookie的值必須是字符串
+
+	2.如果要保存數組，可以將cookie名稱寫成數組形式
+
+		例:
+
+			$arr=['張三','李四'];
+
+			setcookie('age[0]',$arr[0]);
+
+			setcookie('age[1]',$arr[1]);
+
+			$c=$_COOKIE['age'];
+
+			var_dump($c);
+
+
+SESSION (會話機制，較cookie安全) :
+
+	session是保存在服務器上的數據，存入瀏覽器緩存的數據會在24分鐘後過期
+
+	用於:
+
+	1.服務器上記錄登陸網站信息
+
+	2.購物車的紀錄
+
+	3.紀錄在一個用戶對網站訪問過程中的數據
+
+
+開啟session機制 (開啟後才能使用$_SESSION) :
+
+	語法 : session_start();
+
+	數據會被存入$_SESSION，並且可以跨文件使用
+
+	session會傳一個cookie加密代碼
+
+新增(修改)session數據 :
+
+	$_SESSION['變量名']=變量值;
+
+刪除session數據:
+
+	$_SESSION=[];	// 刪除所有數據，在服務器中的空文件不會被刪除
+
+	unset($_SESSION['變量名']);	// 刪除一個數據
+
+	session_destroy();	// 消毀存儲的數據和文件，刪除在服務器中存放session數據的文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+

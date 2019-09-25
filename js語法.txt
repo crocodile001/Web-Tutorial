@@ -1,0 +1,196 @@
+
+function setStyle(name,value){
+
+	var obj=document.getElementById('div');
+
+	obj.style.background=value;		// 第一種用法
+
+	obj.style[name]=value;		// 第二種用法,js中.都可以換成[]
+
+}
+
+元素.style.屬性=xxx,為修改行間樣式
+
+style取樣式在行間,所以之後再修改className不會有效果	// 優先級會出問題
+
+
+提取事件 :
+
+	var obj=document.getElementById('div');
+
+	function action(){
+
+		alert('abc');
+
+	};
+
+	obj.onlick=action;	// 必須給函式
+
+函式 :
+
+	函式不取名為匿名函式,調用:function();
+
+
+window.onload : 當頁面加載完後執行代碼
+
+	window.onload=function(){
+
+	};
+
+
+getElementsByTagName (返回數組) :
+
+	window.onload=function(){
+
+		var obj=document.getElementsByTagName('div');
+
+		for(var i=0;i<obj.length;i++){
+
+			obj[i].style.background='red';
+
+		}
+
+	};
+
+
+全選 :
+
+	window.onload=function(){
+
+		var botton1=docment.getElementById('botton1');
+		
+		var botton2=docment.getElementById('botton2');
+
+		var botton3=docment.getElementById('botton3');
+
+		var odiv=document.getElementById('div1');
+
+		var chbox=document.getElementByTagName('odiv');
+
+		botton1.onclick=function(){
+
+			for(var i=0;i<chbox.length;i++)
+	
+				chbox[i].checked=true;
+
+		};
+
+		botton2.onclick=function(){
+
+			for(var i=0;i<chbox.length;i++)
+	
+				chbox[i].checked=false;
+
+		};
+
+		botton3.onclick=function(){
+
+			for(var i=0;i<chbox.length;i++){
+	
+				if(chbox[i].checked==true)
+
+					chbox[i].checked=false;
+
+				else
+
+					chbox[i].checked=true;
+
+			}
+
+		};
+
+	};
+
+	<input id="botton1" type="botton" value="全選"/><br/>
+	<input id="botton2" type="botton" value="全不選"/><br/>
+	<input id="botton3" type="botton" value="反選"/><br/>
+	<div id=div1>
+		<input type=checkbox/><br/>
+		<input type=checkbox/><br/>
+	</div>
+
+this : 當前發生事件的變數
+
+
+選擇卡 :
+
+	<style>
+	#div1 .active{background:yellow;}
+	#div1 div{width:200px;height:200px;backgrond:#CCC;border:1px solid #999;display:none;}
+	</style>
+	<script>
+	window.onload=function(){
+		var odiv=document.getElementById('div1');
+		var abtn=document.getElementByTagName('input');
+		var adiv=document.getElementByTagName('div');
+
+		for(var i=0;i<abtn.length;i++){
+			abtn[i].index=i;
+			abtn.onclick=function(){
+				for(var i=0;i<abtn.length;i++){
+					abtn[i].className='';
+					adiv[i].style.display='none';
+				}
+				this.className='active';
+				adiv[this.index].style.display='block';
+			};
+		}
+	};
+	</script>
+	<div id="div1">
+		<input class="active" type="botton" value="教育"/>
+		<input type="botton" value="招生"/>
+		<div style="display:block;">111</div>
+		<div>222</div>
+	</div>
+
+字符串連接 : 'abc'+'abc'+123
+
+innerHTML
+
+年曆 :
+<script>
+window.onload=function(){
+	var arr=[
+		'活動1',
+		'活動2'
+	];
+
+	var odiv=document.getElementById('tab');
+	var ali=odiv.getElementByTagName('li');
+	var otxt=odiv.getElementByTagName('div')[0];
+
+	for(var i=0;i<ali.length;i++){
+		ali[i].index=i;
+		ali[i].onmouseover=function{
+			for(var i=0;i<ali.length;i++)
+				ali[i].className='';
+			this.className='active';
+			otxt.innerHTML='<h2>'+(this.index+1)+'月活動</h2><p>'+arr[this.index]+'</p>';
+		};
+	}
+};
+</script>
+<div id="tab" class="calender">
+	<ul>
+		<li class="active"><h2>1</h2><p>JAN</p></li>
+		<li><h2>2</h2><p>FER</p></li>
+	</ul>
+	<div class="text">
+		<h2>1月活動</h2>
+		<p>活動1</p>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

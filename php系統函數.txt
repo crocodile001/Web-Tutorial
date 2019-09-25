@@ -1,0 +1,285 @@
+
+日期函數 :
+
+	設定默認時區 : date_default_timezone_set('Asia/Taipei');
+
+	返回當前unix時間戳 : int time(void);
+
+	將任何字符串的日期時間解析為unix時間戳 : int strtotime(日期字符串);
+
+	格式化一個時間和日期 (默認返回當前日期) : string data(日期格式[,時間戳]);	// data('Y-m-d H:i:s',strtotime(日期字符串));
+
+
+數學函數 :
+
+	進一取整 : float ceil(float $value);
+
+	捨去取整 : float floor(float &value);
+
+	產生一個隨機整數 : int rand([int $min,int $max]); 
+
+
+常用數組 :
+
+		array_values($arr) : 獲取數組值，主要用於對數組的鍵名進行格式化
+
+		array_keys($arr) : 獲取數組的鍵名
+
+		array_filp($arr) : 數組中的值與鍵名互換
+
+		in_array(值,$arr) : [常用] 在數組中檢測值是否存在
+
+		array_search(值,$arr) : 在數組中檢索值，若存在就返回鍵名，否則返回false
+
+		range(低位,高位) : 創建一個包含指定範圍單元的數組
+
+		array_unique($arr) : 移除數組中重複的值，"新的數組"會保留原始的鍵名	// 若要重新排序，可以用array_values
+
+		array_reverse($arr,TRUE) : 返回一個單元順序與原數組相反的數組，若第二個參數為TRUE則保留原始鍵名
+
+		array_rand($arr,2) : 從數組中隨機取出一個或多個元素的鍵
+
+		shuffle($arr) : 將數組的順序打亂
+
+		count($arr) : 統計元素個數
+
+		array_merge(數組1,數組2,...,數組n) : 將多個數組合併
+
+
+字符串與數組相互轉換的函數 :
+
+	將字符串通過分隔符分割後放到數組中 : array explode(分隔符,字符串);
+
+	將數組元素通過連接符連接成字符串(連接符默認為空) : string inplode(連接符,數組);
+
+變量與數組相互轉換的函數 :
+
+	將數組中的元素轉為變量(數組的鍵名作為變量名,數組的值作為變量值 (不推薦:可以於GET和POST) ) : extract($arr);
+
+	將給定的變量名創建一個數組 : compact(var1,var2,var3);	// 不常用
+
+數組的分段和填充 :
+
+	用於刪除指定位置的數組元素(並且在刪除位置替換指定元素) : array_splice(數組,偏移量[,長度,'替換字串']);
+
+stack :
+
+	array_push($arr,'值1',值2'');	// 可推入多個值
+
+	array_pop($arr);	// 推出一個值
+
+queue :
+
+	array_shift();	// inqueue
+
+	array_push();	// dequeue
+
+支持回調函數的數組函數 :
+
+	將回調函數作用到指定數組的單元上 : array array_map(callable $callback,array $arr1[,array $...]);	
+	
+		// 例 : array_map('abs',$arr);
+
+
+數組排序 :
+
+	對值 :
+
+	由小到大順序排序(重排鍵名的數組排序) : sort($arr);
+
+	由大到小逆序排序(重排鍵名的數組排序) : rsort($arr);
+
+	由小到大順序排序(保留鍵名的數組排序) : asort($arr);
+
+	由大到小逆序排序(保留鍵名的數組排序) : arsort($arr);
+
+	對鍵 :
+
+	順序 : ksort($arr);
+
+	逆序 : krsort($arr);
+
+
+	自然排序 (依照人的自然習慣排序) : natsort($arr);
+
+	用戶自定義排序 (告訴計算機按照用戶的思路進行排序) :
+	
+		按照回調函數定義的規則排列 : usort($arr,callable $callback);
+
+		-1 : 排前面	0 : 排中間	1 : 排後面
+
+		例 :
+
+			// 按照年齡進行順序排列
+
+			usort($student,'show');
+
+			function show($a,$b){
+
+				if($a['age'] < $b['age'])
+				
+					return -1;	// 逆序改為1
+
+				if($a['age'] == $b['age'])
+				
+					return 0;
+				
+				if($a['age'] > $b['age'])
+				
+					return 1;	// 逆序改為-1
+
+			}
+
+
+字符串處理 :
+
+	字符串可以用[]為操作符，不能用unset刪除字符，但可以對字符進行修改
+
+	單字節字符 : 英文和數字
+
+	多字節字符 : 中文，在gbk中占2個字節，在utf-8中占3個字節
+
+
+查找字符位置函數 :
+
+	查找字符串在$str中的第一次位置從int開始(回傳鍵名) : strpos($str,字符串[,int]);
+
+	// 如何判斷一個字符串在另一個字符串中有出現 ?
+
+		if(strpos($str,'.') === false){
+
+			echo '找到';
+		
+		}	
+
+		else{
+
+			echo '沒找到';
+
+		}
+
+	查找字符串在$str中的第一次位置從int開始(回傳鍵名) (對大小寫不敏感) : stripos($str,字符串[,int]);
+
+	查找字符串在$str中的最後一次位置從int開始(回傳鍵名) (從右邊開始找) : strripos($str,字符串[,int]);
+
+字符串截取函數 :
+
+	從$str中start位置開始截取[length長度的字符串(lenght默認為最後),length可以為負數,length為字節數] : substr ($str,int start[,int length]);	// substr($str,0,3);
+
+		若要截取中文字(用於處理多字節字符) : mb_substr($str,0,3,'utf-8');	// mb_ 函數可以將多字節字符視為一個字符
+
+	從右邊開始搜到的字符，並截取到最後進行返回 (多用於:截取路徑中文件名或擴展名) : strrchr($str,字符串);
+
+	例 :
+
+		$filename='123456.sio.jpg';
+
+		$ext=strrchr($filename,'.');
+
+		$exts=['.jpg','.doc','.gif'];
+
+		if(in_array($ext,$exts) )	echo '允許上傳';
+
+		else	echo '不允許上傳';
+
+
+替換字串符的函數 :
+
+	從$str中查找search用replace替換 : str_replace(search,replace,$str);
+
+	從$str中查找search用replace替換 (不區分大小寫) : str_ireplace(search,replace,$str);
+
+	substr_replace($str,$replace,$start[,length]) : $str為原字符串，$replace為替換後的新字符串，$start為起始位置，$length為替換長度
+
+
+字符串長度 :
+
+	字節長度 : strlen($str);
+
+	字符(多字節)長度 : mb_strlen($str,'utf-8');
+
+將字串分割成數組 :
+
+	將$str按len長度進行分割返回數組 : str_split($str,len);
+
+	按照分割符分割 : array explode ((string $delimiter ,string $string [,int $limit]);
+
+去除空格 :
+
+	刪除兩邊的空白 : trim($str);
+
+	刪除左邊的空白 : ltrim($str);
+
+	刪除右邊的空白 : rtrim($str);
+
+
+HTML代碼相關的函數 :
+
+	將字串中的換行符轉為<br/> : nl2br();	
+
+	去除html和php標籤 : strip_tags($str,[不去除的標籤]);
+
+	編碼成url支持的內容 : urlencode();
+
+	反編碼 : urldecode();
+
+	頁面正常輸出html代碼參數式轉換方式 : htmlspecialchars($str);
+
+	base64_encode();
+
+	base64_decode();
+
+	生成一個md5算法加密字符串 : md5();
+
+
+大小寫轉換 :
+
+	字符串轉為小寫 : strtolower($str);
+
+	字符串轉為大寫 : strtoupper($str);
+
+	將函數第一個字符轉為大寫 : ucfirst($str);
+
+	將每個單字的首字母轉為大寫 : ucwords($str);
+
+
+quicksort :
+
+
+	function quickSort($arr){
+
+		if(count($arr)<=1)	return $srr;
+
+		$temp=$arr[0];
+
+		$big=$small=[];
+		
+		for($i=1;$i<count($arr);i++){
+
+			if($arr[$i]>$temp)	$big[]=$arr[$i];
+
+			else			$small[]=$arr[$i];
+
+		}
+
+		$big=quickSort($big);
+
+		$small=quickSort($small);
+
+		return array_merge($small.[$temp].$big);
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

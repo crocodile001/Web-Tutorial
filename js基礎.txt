@@ -1,0 +1,448 @@
+
+DOM : Document Object Model
+BOM : Browser Object Model
+
+typeof, offsetLeft, offsetHeight
+
+parseInt() ,parseFloat()
+
+NaN, 閉包
+
+Json : for in
+
+--------------------
+
+不定參數 : arguments (arguments.length)
+
+取非行間樣式 :
+
+	obj.currentStyle[attr]
+	getComputedStyle(obj, false)[attr]
+	
+數組 :
+
+	var arr = [12,5,8,9]
+	var arr = new Array(12,5,8,9)
+	
+	length 屬性 : 可以獲取, 可以設置(如:快速清空數組)
+	
+	添加 :
+	
+		push(元素)	  // 從尾部添加
+		ubshift(元素) // 從頭部添加
+	
+	刪除 :
+	
+		pop()		  // 從尾部彈出
+		shift()		  // 從頭部彈出
+	
+	排序 :
+	
+		sort([比較函數])
+		
+	轉換 :
+	
+		concat(數組) 連接兩個數組
+		join(分隔符) 用分隔符, 組合數組元素, 生成字符串
+		
+	splice(開始, 長度, 元素...)	// 先刪除, 後插入
+	
+		刪除 : splice(開始, 長度)
+		插入 : splice(開始, 0, 元素...)
+		替換
+	
+--------------------
+
+開啟定時器 :
+
+	setInterval 間隔型
+	setTimeout  延時型
+	
+停止定時器 :
+
+	clearInterval
+	clearTimeout
+	
+獲取系統時間 :
+
+	getHours, getMinutes, getSeconds
+	
+設置圖片路徑 : charAt
+
+--------------------
+
+DOM 節點 :
+
+	childNodes ,nodeType
+	parentNode
+	offsetParent
+	
+	首尾節點 :
+	
+		firstChild ,firstElementChild
+		lastChild ,lastElementChild
+	
+	兄弟節點 :
+	
+		nextSibling ,nextElementSibling
+		previousSibling ,previousElementSibling
+		
+	元素屬性操作 :
+	
+		1. oDiv.style.display = "block"
+		2. oDiv.style["display"] = "block"
+		3. DOM 方式
+		
+	DOM 方式操作元素屬性 : 
+		
+		獲取 : getAttribute(名稱)
+		設置 : setAttribute(名稱, 值)
+		刪除 : removeAttrribute(名稱)
+		
+	用 className 選擇元素
+
+--------------------
+
+創建 DOM 元素 : 
+
+	createElement(標籤名)	創建一個節點
+	appendChild(節點)		追加一個節點
+	
+插入元素 :
+
+	insertBefore(節點, 原有節點)
+	
+刪除 DOM 元素 :
+
+	removeChild(節點)
+	
+文檔碎片 :
+	
+	document.createDocumentFragment()
+	
+--------------------
+
+表格應用 :
+
+	獲取 : tBodies, tHead, tFoot, rows, cells
+	
+表格搜索 :
+
+	search, split
+	
+	appendChild : 先把元素從原有的父級上刪除, 再加入新的父級
+	
+--------------------
+
+event 對象 :
+
+	oEvent = ev || event
+	獲取鼠標位置 : clientX, clientY
+	
+事件冒泡 :
+
+	取消冒泡 : oEvent.cancelBubble = true
+	
+鍵盤事件 :
+
+	keyCode
+	onkeydown, onkeyup
+	ctrlkey, shiftkey, altkey
+
+--------------------
+
+默認行為 :
+
+	document.oncontextmenu = function(){
+		return false;	// 阻止默認行為
+	}
+
+--------------------
+
+事件綁定 :
+
+	// IE
+	attachEvent('事件名', 函數)
+		例 : oBtn.attachEvent('onclick', function(){});
+
+	// FF
+	addEventListener('click', function(){}, false);
+		
+
+解除事件綁定 :
+
+	detachEvent('事件名', 函數)
+	removeEventListener('click', function(){}, false);
+	
+事件捕獲 :
+
+	// 只適用於 IE
+		oBtn.setCapture();	// 集中事件
+		oBtn.releaseCapture(); // 釋放所有集中的事件
+	
+	// FF, chrome
+		使用 document
+		
+--------------------
+
+Ajax :
+
+	無刷新數據讀取 (例 : 用戶註冊, 在線聊天室)
+	
+	阻止緩存 : ajax('aaa.txt?t='+new Date().getTime(), function(){}, function(){});
+
+	動態數據 : 請求 JS ( 或 json ) 文件
+	
+		1. eval 的使用
+		
+	過程 :
+	
+		1.創建Ajax對象
+			// 非 IE6
+			var oAjax = new XMLHttpRequest();
+			// IE6
+			var oAjax = new ActiveXObject("Microsoft.XMLHTTP");
+		2.連接到伺服器
+			open(方法, 文件名, 異步傳輸);
+			// 異步 : 多個事情可以一起做
+			// 同步 : 事情一件一件來
+			oAjax.open('GET', url, true);
+			// 例 : url = 'a.txt?t='+ new Data().getTime()
+		3.發送請求
+			oAjax.send();
+		4.接收返回值
+			oAjax.onreadystatechange=function(){
+				if(oAjax.readyState==4){	// 讀取完成
+					if(oAjax.status==200){	// 成功
+						fnSucc(oAjax.responseText);
+					}
+					else{
+						if(fnFailed){
+							fnFailed(oAjax.status);
+						}
+					}
+				}
+			};
+	
+--------------------
+
+JS 面向對象 :
+
+	object.name = 'blue';
+	object.showName = function(){
+		alert(this.name);
+	}
+	object.showName();
+	
+	---
+	
+	function create(name){
+		// 系統自動 var this = new Object();
+		this.name = name;
+		this.showName = function(){
+			alert(this.name);
+		}
+		// 系統自動 return this;
+	}
+	
+	var obj = new create('blue');
+	
+	---
+		
+	原型 :
+	
+	var arr1 = new Array(12, 13, 1, 46);
+	var arr2 = new Array(1, 15, 4);
+	
+	Array.prototype.sum = function(){
+		var result=0;
+		for(var i=0;i<this.length,i++)
+			result+=this[i];
+		return result;
+	}
+	
+	alert(arr1.sum());
+	alert(arr2.sum());
+		
+--------------------
+
+show.call('abc', 12, 1);
+
+將面向對象放入 JSON
+
+	var json = {
+		name : 'blue';
+		showName : function(){
+			alert(this.name);
+		}
+	}
+
+繼承 :
+
+	function A(){
+		this.abc = 12;
+	}
+	
+	A.prototype.show = function(){
+		alert(this.abc);
+	}
+	
+	function B(){
+		// this -> new B()
+		A.call(this);	// 繼承屬性
+	}
+	
+	// 繼承方法
+	for(var i in A.prototype){
+		B.prototype[i] = A.prototype[i];
+	}
+	
+	var obj = new B();
+	
+	obj.show();
+	
+---
+
+宿主對象 : DOM, BOM
+
+本地對象(非靜態對象) : Object, Function, Array, String, Boolean, Number, Data, RegExp, Error	// 要 new
+
+內置對象(靜態對象) : Global, Math	// 不用 new
+	
+--------------------
+
+BOM 應用 :
+
+	document.write	// 先清空, 再寫入
+	window.open(url, ...);	// 打開窗口
+	
+	window.close();	// 關閉窗口, 關閉由 open 產生的頁面
+	
+	window.navigator.userAgent
+	window.location	// 網頁地址
+	
+	可視區尺寸 :
+	
+		document.documentElement.clientWidth
+		document.documentElement.clientHeight
+		
+	滾動距離 :
+	
+		document.body.scrollTop
+		document.documentElement.scrollTop	// chrome
+		
+	window對象常用事件 :
+	
+		onload, onmscroll, onresize
+		
+	系統對話框 :
+	
+		警告框 : alert("內容"), 沒有返回值
+		選擇框 : confirm("提問的內容"), 返回 boolean
+		輸入框 : prompt(), 返回字符串或 null
+
+--------------------
+
+cookie 基礎與應用 :
+
+	特性 : 同一個網站中所有頁面共享一套 cookie
+	
+	JS 中使用 cookie : 
+	
+		document.cookie, 名子 = 值
+	
+		// 設置 cookie
+		function setCookie(name, value, iDay){
+			var oDate = new Date();
+			oDate.setDate(oDate.getDate()+iDay);	// 設置過期時間
+		
+			document.cookie = name+'='+value+';expires='+oDate;
+			//document.cookie = 'user=blue;expires='+oDate;	// 添加
+			//document.cookie = 'pas=123456';	// 之前的資料不會被覆蓋
+		}
+			
+		// 讀取 cookie
+		function getCookie(name){
+			var arr = document.cookie.split('; ');
+			for(var i=0; i<arr.length; i++){
+				var arr2 = arr[i].split('=');
+				if(arr2[0]==name)
+					return arr2[1];
+			}
+			return '';
+		}
+		
+		// 刪除 cookie
+		function removeCookie(name){
+			setCookie(name, 1, -1);
+		}
+
+--------------------
+
+JS 正則表達式 (強大的字符串匹配工具):
+
+	RegExp對象 :
+	
+		JS 風格 - new RegExp("a", "i");	// i = 忽略大小寫
+			// var re = new RegExp('a', 'i');
+		perl風格 - /a/i
+			// var re = /a/i;
+			
+	---
+	
+	\d = 數字 [0-9]
+	g = global, 找出全部
+	+ = 量詞, 若干個
+	
+	var str = 'asd 34 656 cvs66';
+	var re = /\d+/g;
+	alert(str.match(re))
+	
+	---
+	
+	// 替換
+	var re = /北京|百度|淘寶/g;
+	oTxt2.value = oTxt1.value.replace(re,'***');
+	
+	---
+	
+	任意字符 : [abc]
+		// 例 : o[usb]t -> obt, ost, out
+	範圍 : [a-z], [0-9]
+		// 例 : id[0-9] -> id0, id5
+	排除 : [^a]
+		// 例 : o[^0-9]t -> oat, o?t, o tBodies
+	轉義字符 :
+		. -> 任意字符
+		\w -> 英文, 數字, 下劃線 [a-z0-9_]
+		\s -> 空白字符
+		\D -> [^0-9]
+		\W -> [^a-z0-9_]
+		\S -> 非空白字符
+		
+	---
+	
+	量詞 : 個數
+	
+	{n} 正好出現n次
+	{n, m} 最少n次, 最多m次
+	{n,} 最少n次, 最多不限
+	+ -> {1,}
+	? -> {0, 1}
+	* -> {0,}
+	
+	^ -> 行首(字符串開頭)
+	$ -> 行尾(字符串結尾)
+	
+	---
+	
+	郵箱校驗
+	
+	var re = /^\w+@[a-z0-9]+\.[a-z]+$/i;
+	if(re.test(txt))		// test = 字符串一部分符合要求
+		alert('合法');
+	
+	^ -> 行首(字符串開頭)
+	$ -> 行尾(字符串結尾)
+	
+--------------------

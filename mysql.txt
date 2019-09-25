@@ -1,0 +1,343 @@
+
+副檔名 : .sql
+
+數據庫分類 : 層次型數據庫、網絡型數據庫、關係型數據庫(最重要)
+
+E-R圖 : 用於顯示數據之間的關係
+
+常用術語 :
+
+	數據庫 database
+
+	表 table
+
+	行 row 列 column
+
+	紀錄 record
+
+	字段 field (最小單位)
+
+	管理系統 management system
+
+	關係 relational
+
+	結構化查詢語言 SQL(structured query language)	// T-SQL 標準化數據庫
+
+
+MYSQL採用C/S架構
+
+
+命令行管理模式 :
+
+	連接命令 : mysql(.exe) -h(主機名) (-p(端口)) -u(用戶名) -p(密碼)	// 用戶名和密碼都預設為root
+
+	SQL命令 : 
+
+		show databases;
+
+		use 數據庫名;
+
+		show tables;
+
+
+	退出命令 : exit , quit , \q
+
+DOS命令 :
+
+	D: 進入D盤
+
+	dir 顯示目錄和文件列表
+
+	cd 目錄名 : 進入目錄
+
+	cd ../ : 回上級目錄
+	    ./ : 當前目錄
+	     / : 進入根目錄	
+
+
+操作數據庫 :
+
+	-- : 註釋
+
+	創建數據庫 :
+
+		create database 數據庫名 ;
+
+	顯示服務器上的所有數據庫 :
+
+		show databases;
+
+		show databases like '%字符%';	// 顯示有特定字符的數據庫 (%匹配0個或多個任意字符)
+
+		show databases like '____';	// 顯示四個字的數據庫 (_匹配任意一個字符)
+
+	查看創建數據庫的語句 :
+
+		show create database 數據庫名 ;
+
+	修改數據庫 :
+
+		alter database 數據庫名 愈改內容;	(例 : alter database test charset=utf-8; )
+
+	刪除數據庫 :
+
+		drop database 數據庫名;
+
+	設置默認數據庫 :
+
+		use 數據庫名;
+
+
+數據表 :
+
+	創建數據表語法 :
+
+	create table 表明(
+
+		字段(字段名 字段類型 字段屬性)
+
+	)[表選項];
+
+	典型類型 : int , varchar(M)變長字串符類型，其中M表示最大長度，字符數
+
+	典型的表選項 : 
+
+		engine : 表示表的儲存類型，常見的有 myisam(默認) , innodb(推薦)
+
+		charset 字符集
+
+	創建表時，需要指定數據庫，可以在表名上直接指定(庫名.表明)
+
+	例: 
+
+		create table test.student(
+
+			id int,
+
+			username varchar(20),
+
+			age int
+
+		);
+
+	show tables : 查看所有數據表
+
+	show create table 表明 : 查看所有數據表的建表語句
+
+	desc 表明 : 查看表結構
+
+	drop table 表明 : 刪除表
+
+	alter table 表明 : 修改表(可以修改默認引擎(engine=引擎)和字符集(charset=字符集))
+
+	rename table 舊名子 to 新名子 : 修改表名
+
+
+字段的操作(了解) :
+
+	創建字段在創建數據表時進行，創建完成後可以操作字段
+
+	增加新字段 : alter table 表名 add column 字段名 字段類型 [字段屬性]
+
+	修改字段類型和屬性 : alter table 表名 modify column 字段名 字段類型 [字段屬性] [after 字段名 , first , ...(修改順序)]
+
+	修改字段名子和定義 : alter table 表名 change column 舊字段名 新字段名 字段類型 [字段屬性]
+
+	刪除字段 : alter table 表名 drop column 字段名
+
+
+紀錄操作 (重點) :
+
+	增加紀錄 : insert into 表名(字段列表,...) values (值的列表,...)		// 值的個數與數據表中字段的個數完全一致時，可以省略寫字段列表只寫表名
+
+		例 : insert into test(username) values('張三');
+
+	查看數據庫中紀錄 : select 字段列表 from子句 [inner join 連接查詢] [where子句] [group by 分組子句] [having 條件子句] [order by子句] [limit子句]	// 顯示所有字段 : select * from 表名
+
+		[字段列表] : 字段1,字段2,......,字段n	// * : 通配符，匹配所有字段
+
+		from子句 : 用於為select語句提供數據，確定數據源
+
+			1個表 : 將這個表設置為數據的來源表	// 	select * from student,classes 從學生表和班級表中獲取數據
+
+			多個表 : 連表查詢
+
+			(還可以為表格指定別名 : select * from test s -> 指定別名為s)
+
+		where子句 : 用於過濾數據，只取出滿足條件的紀錄		// 例 : select * from student where age>=20
+
+		order by子句 : 用於對顯示的數據進行排序
+
+			升序 : select * from student where age>=20 order by age asc
+
+			降序 : select * from student where age>=20 order by age desc
+
+		limit子句(可用於分頁) : 用於限制出數據的條數
+
+			例 : select * from student where age>=20 order by age asc limit 2 -> 最接近20歲的2個學生
+
+			like : select * from 表名 where username like '%老%'	// 用於模糊搜尋
+
+			提取前n個數據 : limit n;
+
+			從m條開始提取n條數據 : limit m,n;
+
+	修改紀錄 :
+
+		update 表名 set 字段名1=新的值1,字段名2=新的值2,字段名n=新的值n where子句	// 若不設置where，整個column都會被改變
+
+			例 : update student set age=22,id=1 where username='張三';
+
+	刪除紀錄 :
+
+		delete from 表名 where 條件子句		// 不加where，整個table的內容會全被刪除
+
+			例 : delete from student where age=0;
+
+	p.s. 在做修改和刪除時，最好先備份數據，因為數據救不回來
+
+	p.s. 	若遇到 cmd 顯示問題，可以更改字符集
+
+		show names gbk;
+
+	     show variable like '%char%';
+
+
+數據型態 :
+
+	整數 :	
+
+		int : tinyint(1字符)，smallint(2字符)，mediumint(3字符)，int(4字符)，bigint(8字符)	
+
+			可以用unsigned表示無符號 : tinyint unsigned , ......
+
+	小數 :
+
+		float和double : 其後要加(M,D)
+
+		(M,D) : M為精度(總長度)，D為標度(小數的長度)	// 例 : float(7,2)
+
+	字符串 :
+
+		char(M) : M為最大字符數		// 分配空間固定為M，浪費空間，除非數據固定空間，速度快
+
+		varchar(M) (常用) : M為最大字符數	// 用於非固定空間的數據，多餘的空間不會使用，速度慢，需用額外空間存實際長度
+
+			char和varchar的字串最大長度 : 65535字節
+
+	文本 (較長的字符串) :
+
+		text : 大約64KB，用於256字以上
+
+		longtext : 大約4GB
+
+	時間日期 :
+
+		datatime : 
+
+			格式 : YYYYMMDD HH:II:SS，占8字節，
+
+		// data,year,time : 不常用
+
+		timestamp (常用) :
+
+			以整數的方式儲存，占4字節，運算速度快	// 只能用於1970~2038年
+
+			timestamp不能為空，默認值為當前時間，而且改值後會自動更新為當前時間
+
+			例 :
+
+				create table data_1(
+
+					d1 datatime;
+
+					d2 timestamp default current_timestamp	// 去除自動更新，主動設置默認值
+
+
+導出數據庫 :
+
+	導出 : mysqldump(.exe) -u用戶名 -p密碼 數據庫名 > 導出的地址和文件名
+
+		例 : mysqldump(.exe) -uroot -proot 數據庫名 > d:\檔名.sql
+
+	導入 : 
+
+		1.進入mysql命令行模式
+
+		2.source sql文件路徑
+
+
+字段屬性 (用於對字段設置附加屬性) :
+
+	null : null是空值也是一個屬性，表示是否允許字段為空	
+
+		not null 不允許為空
+
+		null (默認)
+
+		例 :
+
+			create table null_1(
+
+				username varchar(20),
+
+				gender char(1) not null
+
+			);
+
+	default (用於設置字段的默認值，當'插入'新數據時，若沒為字段設置值時，自動使用默認值) :
+
+		例 :
+
+			create table default_1(
+
+				username varchar(20) default '匿名',
+
+				gender char(2)
+
+			);
+
+		default關鍵詞，使用default強制使用默認值 :
+
+			insert into default_1 values(default,'男');
+
+		特殊默認值 :
+
+			timestamp默認值 : current_timestamp  on updata current_timestamp
+
+			時間戳的常用寫法 (重要) : timestamp default current_timestamp
+
+				例 : alter table default_1 modify column reg_time timestamp default current_timestamp;
+
+	primary key 屬性 (主鍵、主索引) :
+
+		1.一個表中只能有一個主鍵
+
+		2.主鍵修飾的字段，值不能重複
+
+		3.值不能為null
+
+		4.通常用於修飾數據標示(ID字段)
+
+		例 :
+
+			create table classes(
+
+				id int primary key auto_increment,
+
+				classname varchar(20),
+
+				classroom char(3)
+
+			);
+
+			insert into classes values(null,'PHP0217','607');
+
+	auto_increment (自動增長) :
+
+		通常和主鍵一起使用，讓ID實現自動增長，添加數據時不管ID值
+
+	p.s. 以上都有限制字段的功能，所以又稱為字段約束
+
+
+

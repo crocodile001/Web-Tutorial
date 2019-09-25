@@ -1,0 +1,115 @@
+
+若分別獨立安裝php和mysql並不會自動支持，需做以下設置配置 :
+
+	1.打開php.ini
+
+	2.去除 extension=php_mysql.dll 和 extension=php_mysqli.dll 前面的註釋分號
+
+	3.重啟apache服務器即可加載mysql擴展
+
+	注 : mysql , mysqli(常用) , pdo(常用) , odbc 都是PHP的數據庫擴展程度，根據需要選用
+
+
+使用PHP連接MySQL :
+
+	語法(PHP函數) : mysqli_connect('主機','用戶','密碼','數據庫'[,端口]);	// 連接成功返回資源，失敗返回false
+
+		例 : $conn=@mysqli_connect('localhost','root','root','test') or die('Error') ;	// $conn稱為數據庫連接標示
+
+			// @是為了防止顯示連接失敗後的訊息，die('顯示內容')是終止程式執行
+
+
+使用PHP訪問數據庫 :
+
+	語法 : mysqli_query(數據庫連接標示,'sql指令');
+
+		例 : $result=mysqli_query($conn,'set names utf8');	// $result稱為結果集
+
+	關閉數據庫連接 : mysqli_close(數據庫連接標示);	// mysqli_close($conn);
+
+
+結果集的處理 :
+
+	由於資源類型永遠為真，不能用於判斷是否有數據，只能用於判斷命令是否執行成功
+
+	使用PHP函數 : mysqli_fetch_assoc(結果集);
+
+		從結果集中讀取一條數據，將讀取到的數據以關聯數組的形式返回，關聯數組的鍵名就是字段名，同時，結果集指針向下移動一行
+
+		例 :
+
+			while( $row=mysqli_fetch_assoc($result) ){
+
+				echo 'ID:'.$row['id'].<br/>;
+
+			}
+	設置PHP與MYSQL交互的字符集 : mysqli_query($conn,'set names utf8');
+
+	選擇數據庫 : mysqli_select_db($conn,'test');
+
+	釋放結果集所占內存空間 : mysqli_free_result($result);
+
+其他 :
+
+	錯誤提示 : mysqli_error(數據庫連接標示);
+
+		例 : echo mysqli_error($conn);
+
+	mysqli_fetch_assoc(結果集);	// 獲取一行數據做為關聯數組返回
+
+	mysqli_fetch_row(結果集);	// 獲取一行數據做為索引數組返回
+
+	mysqli_fetch_array(結果集);	// 獲取一行數據做為關聯+索引數組返回，可以用關聯或索引查詢，但需求空間是兩倍
+
+	
+	統計結果集中數據的行數 : mysqli_num_rows(結果集);	// 通常用於判斷結果集中是否有數據，等於0就是沒數據
+
+	結果集指針(較不重要，可用於重複輸出結果集指針) :
+
+		移動結果集指針 : mysqli_data_seek(結果集,移動到的目標位置);	// 例 : mysqli_data_seek($result,0);
+
+	取得剛插入的數據ID :
+
+		// 會員手動登入 : mysqli_query($conn,'select @@IDENTITY');
+
+		可實現會員自動登入(推薦) : mysqli_insert_id(數據庫連接標示);
+
+
+統一項目字符集 :
+
+	一共有四個地方會影響客戶端的展示 :
+
+		1. 數據在服務器儲存的編碼
+
+		2. 客戶端向服務器端發送的數據編碼		// 配置項 : character_set_client
+
+		3. 客戶端和服務器之間的連接層使用的編碼		// 配置項 : character_set_connection
+
+		4. 服務器向客戶端發送處理結果的數據編碼		// 配置項 : character_set_results
+
+		// 可以使用 show variables like 'character_set_client' 查看變量
+
+		// set character_set_results=gbk;	// set 可用來更改設置
+
+		// set names gbk	// 此用法可以將三個變量一同設置為gbk
+
+	項目字符集五個地方統一 :
+
+		1. PHP與瀏覽器之間交互的編碼
+
+			header('Content-Type:text/html; charset=utf-8');
+
+		2. PHP文件保存的編碼 utf-8，在編輯器中設置
+
+		3.數據庫保存數據時，用utf8
+
+			show create table student;
+
+		4.設置PHP與mysql交互層使用utf8
+
+			mysqli_query($conn,'set names utf8');
+
+		5.HTML meta標籤聲明必須使用utf-8
+
+			<meta charset='utf-8'/>
+
